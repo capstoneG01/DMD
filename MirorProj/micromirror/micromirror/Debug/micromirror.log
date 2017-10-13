@@ -1,0 +1,3 @@
+﻿  main.cpp
+  LINK : C:\Users\umfehr44.ENG\Desktop\Micromirror2\micromirror\Debug\micromirror.exe not found or not built by the last incremental link; performing full link
+LINK : fatal error LNK1104: cannot open file 'gdi32.lib'

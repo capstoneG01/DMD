@@ -1,0 +1,14 @@
+﻿  API.c
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\api.c(1468): warning C4244: '=': conversion from 'short' to 'unsigned char', possible loss of data
+  main.cpp
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\project_constants.h(5): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+  c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\project_constants.h(5): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(134): warning C4805: '==': unsafe mix of type 'BOOL' and type 'bool' in operation
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(141): warning C4474: 'printf' : too many arguments passed for format string
+  c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(141): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(145): warning C4474: 'printf' : too many arguments passed for format string
+  c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(145): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(345): error C4700: uninitialized local variable 'splash_size' used
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(345): error C4700: uninitialized local variable 'splashImageCount' used
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(347): error C4700: uninitialized local variable 'origSize' used
+c:\users\kanevsks\desktop\mirorproj\micromirror\micromirror\main.cpp(347): error C4700: uninitialized local variable 'pointerToImageArray' used
