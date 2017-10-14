@@ -21,16 +21,21 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
+#include "BMPParser.h"
+#include "pattern.h"
+#include "splash.h"
 
 void sendDataToMirror(void);
+
+int toSplash(Image_t *img, unsigned char **data);
 
 void case1(void);
 void case2(void);
 void case3(void);
 void case4(void);
 void case5(void);
-
-
+void case6(void)
+;
 struct PatternElement
 {
 	int bits;
@@ -74,7 +79,7 @@ int main(int argc, char **argv)
 
 	do
 	{
-		printf("\nPlease select an option:\n1-Open Connection\n2-Load Image\n3-Close Connection\n4-Stop\n5-Pause\n6-Quit\n");
+		printf("\nPlease select an option:\n1-Open Connection\n2-Load Image\n3-Close Connection\n4-Stop\n5-Pause\n6-start\n7-Quit\n");
 		std::cin >> inputValue;
 		switch (inputValue)
 		{
@@ -87,7 +92,7 @@ int main(int argc, char **argv)
 		case '3':
 			case3();
 			break;
-		case '6':
+		case '7':
 		case 'q':
 		case 'Q':
 			runProgram = 0;
@@ -97,6 +102,9 @@ int main(int argc, char **argv)
 			break;
 		case '5':
 			case5();
+			break;
+		case '6':
+			case6();
 			break;
 		default:
 			printf("No such option, pelase try again\n");
@@ -159,7 +167,7 @@ void case2()
 	std::string path3;
 	std::string path4;
 
-	int numPatAdded = 1;
+	int numPatAdded = 0;
 
 	if (LCR_SetMode(0x3) < 0) 		
 	{
@@ -178,11 +186,11 @@ void case2()
 
 	if (!error_flag) // get path to images
 	{
-		imageCount = 4; 
-		path1 = "C:\\Users\\kanevsks\\Desktop\\MirorProj\\micromirror\\image1.bmp";
-		path2 = "C:\\Users\\kanevsks\\Desktop\\MirorProj\\micromirror\\image2.bmp";
-		path3 = "C:\\Users\\kanevsks\\Desktop\\MirorProj\\micromirror\\image3.bmp";
-		path4 = "C:\\Users\\kanevsks\\Desktop\\MirorProj\\micromirror\\image4.bmp";
+		imageCount = 1; 
+		path1 = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\image4.bmp";
+		path2 = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\image4.bmp";
+		path3 = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\image4.bmp";
+		path4 = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\image4.bmp";
 	}
 	LCR_ClearPatLut(); // clear image LUT
 
@@ -194,8 +202,8 @@ void case2()
 		//set pattern variables for the images
 		pattern1.bits = 1;
 		pattern1.color = 1;
-		pattern1.exposure = 200000;
-		pattern1.darkPeriod = 100000;
+		pattern1.exposure = 2000000;
+		pattern1.darkPeriod = 1000000;
 		pattern1.trigIn = false;
 		pattern1.trigOut2 = true;
 		pattern1.name = path1;
@@ -237,7 +245,7 @@ void case2()
 		}
 		else
 			numPatAdded++;
-
+		
 		if (LCR_AddToPatLut(numPatAdded, pattern2.exposure, true, pattern2.bits, pattern2.color, pattern2.trigIn, pattern2.darkPeriod, pattern2.trigOut2, 0, 0)<0)
 		{
 			printf("Unable to add pattern number %d to the LUT", numPatAdded);
@@ -264,34 +272,6 @@ void case2()
 		}
 		else
 			numPatAdded++;
-
-
-
-
-
-		sendDataToMirror();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
 
 	//send images:
@@ -300,7 +280,7 @@ void case2()
 		printf("Sending pattern LUT failed!\n");
 		error_flag = 1;
 	}
-
+	
 	if (!(error_flag)) 
 		error_flag = LCR_SetPatternConfig(imageCount, 0);// set to repeat images
 	//error_flag = LCR_SetPatternConfig(imageCount, show_this_ammount);// set to run 'show_this_ammount' of images and then stop.
@@ -310,11 +290,18 @@ void case2()
 		printf("error_flag = %d\n", error_flag);
 	}
 
-	if (LCR_PatternDisplay(0x2) < 0)
-		printf("Unable to start pattern display");
+	sendDataToMirror();
 
 }
  
+
+void case6()
+{
+
+	if (LCR_PatternDisplay(0x2) < 0)
+		printf("Unable to start pattern display");
+}
+
 void case4() 
 {
 	if (LCR_PatternDisplay(0x0) < 0)
@@ -333,122 +320,75 @@ void sendDataToMirror()
 {
 	int m_ptnWidth = 1920;
 	int m_ptnHeight = 1080;
-	uint08  * pointerToImageArray;
-
-
-	int splashImageCount;
-	int origSize;
-	int splash_size;
-
-
-
-	LCR_InitPatternMemLoad(true, splashImageCount, splash_size);
+	uint08 *splashData;
+	bool master = true;
+	int error = 0;
+	int imageCount = 1 ;
+	int bitDepth = 24;
+	Image_t  pattern1Image_tSpace ;
 	
-	int dnldSize = LCR_pattenMemLoad(true, pointerToImageArray + (origSize - splash_size), splash_size);
+	//Image_t *pattern1Image_t = &pattern1Image_tSpace;
+
+	Image_t *pattern1Image_t = PTN_Alloc(m_ptnWidth, m_ptnHeight, bitDepth);
+
+	char path1[]= "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\image4.bmp";
+	const char *pathptr = path1;
+	error = BMP_LoadFromFile(pathptr, pattern1Image_t);
+	if (error != SUCCESS)
+	{
+		printf("error in BMP_LoadFromFile\n");
+	}
+	
+	printf("%d\n", pattern1Image_t->Buffer); /**< Pointer to the image buffer */
+	printf("%d\n",pattern1Image_t->Width);             /**< Width of the image in pixels */
+	printf("%d\n", pattern1Image_t->Height);            /**< Height of the image in pixels */
+	printf("%d\n", pattern1Image_t->LineWidth);         /**< Number of bytes in a line */
+	printf("%d\n", pattern1Image_t->FullHeight);        /**< Total height of the original image */
+	printf("%d\n", pattern1Image_t->BitDepth);
+
+	uint08* splash_block_master = NULL;
+	uint08* splash_block_slave = NULL;
+
+	int splashSizeMaster = toSplash(pattern1Image_t,&splash_block_master);
+	printf("splashSizeMaster: %d\n", splashSizeMaster);
+	//int splashSizeSlave = merge_image_slave.toSplash(&splash_block_slave);
+
+	//if (splashSizeMaster <= 0 || splashSizeSlave <= 0)
+		//return -1;
+
+	//if (uploadPatternToEVM(true       ,    spalshImageCount,                        splashSizeMaster,     splash_block_master) == -1)
+	//int                   (bool master,    int splashImageCount,                    int splash_size,      uint08* splash_block)
+	//this does the following:
+
+
+	int origSize = splashSizeMaster;
+	int splashImageCount = 1;
+	LCR_InitPatternMemLoad(master, splashImageCount, splashSizeMaster);
+
+	int dnldSize = LCR_pattenMemLoad(master, splash_block_master + (origSize - splashSizeMaster), splashSizeMaster);
 	if (dnldSize < 0)
 	{
-		printf("Unable Download image !!");
+		printf("error in LCR_pattenMemLoad\n");
 	}
 
-
-
-
-	/*for (int image = 0; image < totalSplashImages; image++)
-	{
-
-		int spalshImageCount;
-
-		spalshImageCount = totalSplashImages - 1 - image;
-
-		PtnImage merge_image(m_ptnWidth, m_ptnHeight, 24);
-
-		merge_image.fill(0);
-
-
-		for (int i = 0; i < m_elements.size(); i++)
-		{
-			if (m_elements[i].splashImageIndex != spalshImageCount)
-				continue;
-			int bitpos = m_elements[i].splashImageBitPos;
-			int bitdepth = m_elements[i].bits;
-			PtnImage image(m_elements[i].name);
-			merge_image.merge(image, bitpos, bitdepth);
-		}
-
-		merge_image.swapColors(PTN_COLOR_RED, PTN_COLOR_BLUE, PTN_COLOR_GREEN);
-		uint08* splash_block = NULL;
-
-		PtnImage merge_image_master(m_ptnWidth, m_ptnHeight, 24);
-		PtnImage merge_image_slave(m_ptnWidth, m_ptnHeight, 24);
-		merge_image_master = merge_image;
-		merge_image_slave = merge_image;
-		if (m_dualAsic)
-		{
-
-			merge_image_master.crop(0, 0, m_ptnWidth / 2, m_ptnHeight);
-			merge_image_slave.crop(m_ptnWidth / 2, 0, m_ptnWidth / 2, m_ptnHeight);
-
-			if (firmware == true)
-			{
-				if (m_firmware->addSplash(&merge_image_master) < 0)
-				{
-					showError(GET_ERR_STR());
-					return -1;
-				}
-				if (m_firmwareSlave != NULL)
-				{
-					if (m_firmwareSlave->addSplash(&merge_image_slave) < 0)
-					{
-						showError(GET_ERR_STR());
-						return -1;
-					}
-				}
-			}
-
-			else
-			{
-				uint08* splash_block_master = NULL;
-				uint08* splash_block_slave = NULL;
-
-				int splashSizeMaster = merge_image_master.toSplash(&splash_block_master);
-				int splashSizeSlave = merge_image_slave.toSplash(&splash_block_slave);
-
-				if (splashSizeMaster <= 0 || splashSizeSlave <= 0)
-					return -1;
-
-				if (uploadPatternToEVM(true, spalshImageCount, splashSizeMaster, splash_block_master) == -1)
-					return -1;
-
-				if (uploadPatternToEVM(false, spalshImageCount, splashSizeSlave, splash_block_slave) == -1)
-					return -1;
-
-			}
-		}
-		else
-		{
-			if (firmware == true)
-			{
-				if (m_firmware->addSplash(&merge_image) < 0)
-				{
-					showError(GET_ERR_STR());
-					return -1;
-				}
-			}
-			else
-
-			{
-				int splashSize = merge_image.toSplash(&splash_block);
-				if (splashSize <= 0)
-					return -1;
-				if (uploadPatternToEVM(true, spalshImageCount, splashSize, splash_block) < 0)
-					return -1;
-			}
-		}
-	}
-	*/
+	//splashSizeMaster -= dnldSize;
 
 }
 
 
 
 
+int toSplash(Image_t *img,unsigned char **data)
+{
+	uint08 *splashData = NULL;
+	if (splashData == NULL)
+	{
+		splashData = SPL_AllocSplash(img->Width, img->Height);
+		if (splashData == NULL)
+			return ERR_OUT_OF_RESOURCE;
+	}
+
+	*data = splashData;
+
+	return SPL_ConvImageToSplash(img, SPL_COMP_AUTO, splashData);
+}

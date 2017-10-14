@@ -111,6 +111,7 @@ int BMP_ParseImage(BMP_DataFunc_t *GetData, void *DataParam,
                                 BMP_PixelFunc_t *DrawPixels, void *DrawParam,
                                 uint8 OutBitDepth)
 {
+	
     int Error = SUCCESS;
     uint8 Header[BMP_FILE_HEADER_SIZE + BMP_DIB_HEADER_SIZE];
     BMP_ImageHeader_t Image;
