@@ -361,7 +361,7 @@ int PTN_Fill(Image_t *Image, uint08 Fill)
 	for(y = 0; y < Image->Height; y++)
 	{
 		memset(Ptr, Fill, Image->Width * BYTES_PER_PIX);
-		Ptr += Image->LineWidth;
+		Ptr += (Image->LineWidth);
 	}
 
 	return SUCCESS;

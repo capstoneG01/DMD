@@ -89,6 +89,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,6 +131,7 @@
     <ClCompile Include="hid.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pattern.c" />
+    <ClCompile Include="QtCodeCoppy.cpp" />
     <ClCompile Include="splash.c" />
     <ClCompile Include="usb.c" />
   </ItemGroup>
@@ -148,6 +150,7 @@
     <ClInclude Include="pattern.h" />
     <ClInclude Include="project_constants.h" />
     <ClInclude Include="PtnImage.h" />
+    <ClInclude Include="QtCodeCoppy.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="splash.h" />
     <ClInclude Include="usb.h" />

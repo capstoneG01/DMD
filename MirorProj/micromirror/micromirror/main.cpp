@@ -24,6 +24,7 @@
 #include "BMPParser.h"
 #include "pattern.h"
 #include "splash.h"
+#include "QtCodeCoppy.h"
 
 void sendDataToMirror(void);
 
@@ -34,8 +35,10 @@ void case2(void);
 void case3(void);
 void case4(void);
 void case5(void);
-void case6(void)
-;
+void case6(void);
+void case7(void);
+void case8(void);
+
 struct PatternElement
 {
 	int bits;
@@ -65,9 +68,6 @@ struct PatternElement pattern2;
 struct PatternElement pattern3;
 struct PatternElement pattern4;
 
-
-
-
 int main(int argc, char **argv)
 {
 	int runProgram = 1;	
@@ -76,43 +76,70 @@ int main(int argc, char **argv)
 	//or
 	//printf(""Micromirror main function start %d"\n",rollingValue);
 
-
 	do
 	{
-		printf("\nPlease select an option:\n1-Open Connection\n2-Load Image\n3-Close Connection\n4-Stop\n5-Pause\n6-start\n7-Quit\n");
+		printf("\nPlease select an option:\n");
+		printf("1-Open Connection\n");
+		printf("2-Load Image\n");
+		printf("3-Close Connection\n");
+		printf("4-Stop\n");
+		printf("5-Pause\n");
+		printf("6-Start\n");
+		printf("7-Standby Mode\n");
+		printf("8-Normal Mode\n");
+		printf("O-Open connection, enter normal mode, stop, load image, start\n");
+		printf("X-Stop, enter standby mode, quit\n");
+		printf("9-Quit\n");
 		std::cin >> inputValue;
 		switch (inputValue)
 		{
-		case '1':
+		case '1': // Open Connection
 			case1();
 			break;
-		case '2' :
+		case '2' : // Load Image
 			case2();
 			break;
-		case '3':
+		case '3': // Close Connection
 			case3();
 			break;
-		case '7':
+		case '4': // Stop
+			case4();
+			break;
+		case '5': // Pause
+			case5();
+			break;
+		case '6': // Start
+			case6();
+			break;
+		case '7': // Standby Mode
+			case7();
+			break;
+		case '8': // Normal Mode
+			case8();
+			break;
+		case '9': // Quit
 		case 'q':
 		case 'Q':
 			runProgram = 0;
 			break;
-		case '4':
+		case 'X': // Stop, enter standby mode, quit
+		case 'x':
 			case4();
+			case7();
+			runProgram = 0;
 			break;
-		case '5':
-			case5();
-			break;
-		case '6':
+		case 'O': // Open connection, enter normal mode, stop, load image, start
+		case 'o':
+			case1();
+			case8();
+			case4();
+			case2();
 			case6();
 			break;
 		default:
-			printf("No such option, pelase try again\n");
+			printf("No such option, please try again\n");
 			break;
 		}
-
-
-
 	} while (runProgram);
 
 	/*
@@ -128,15 +155,12 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-
-
-
-void case1()
+void case1() // Open Connection
 {
 	USB_Init();
 	printf("USB Initialized...\n");
 	int usb_error_flag;
-	for (int i = 0; (i < 6) && (USB_IsConnected() == false); i++) /// will try 5 times to reconnect..
+	for (int i = 0; (i < 6) && (USB_IsConnected() == false); i++) /// will try 5 times to reconnect...
 	{
 		usb_error_flag = USB_Open(); // -1=Error | 0=Opened
 		if (usb_error_flag == 0 && USB_IsConnected() == true)
@@ -152,14 +176,10 @@ void case1()
 	if (USB_IsConnected() == false)
 		printf("Posible USB Connection Failures:,\n Verify that micromirror is connected and powered on!\n Or verify there are no other processess using the micromirror (like T-GUI)!\n Or try reconecting USB cable to the computer!\n Or Hard reset the micromirror!\n", usb_error_flag);
 }
-void case3()
+
+void case2() // Load Image
 {
-	USB_Close();
-	USB_Exit();
-	printf("USB Closed.\n");
-}
-void case2()
-{
+	
 	int imageCount;
 	int error_flag = 0; 
 	std::string path1;
@@ -171,7 +191,7 @@ void case2()
 
 	if (LCR_SetMode(0x3) < 0) 		
 	{
-		//TODO::WE SHOULD MAKE THESE CONSTANTS IN OUR DEFINE>H FILW
+		//TODO::WE SHOULD MAKE THESE CONSTANTS IN OUR DEFINE>H FILE
 		// 0 is  "Video Mode"
 		// 1 is  "Pre stored Pattern"
 		// 2 is  "Video Pattern Mode"
@@ -183,7 +203,7 @@ void case2()
 	{
 		printf("Mode switched to: Pattern on the fly\n");
 	}
-
+	/*
 	if (!error_flag) // get path to images
 	{
 		imageCount = 1; 
@@ -291,30 +311,48 @@ void case2()
 	}
 
 	sendDataToMirror();
-
+	*/
+	addPattern();
 }
  
 
-void case6()
+void case3() // Close Connection
+{
+	USB_Close();
+	USB_Exit();
+	printf("USB Closed\n");
+}
+
+void case4() // Stop
+{
+	if (LCR_PatternDisplay(0x0) < 0)
+		printf("Unable to stop pattern display");
+}
+
+void case5() // Pause
+{
+	if (LCR_PatternDisplay(0x1) < 0)
+		printf("Unable to pause pattern display");
+}
+
+void case6() // Start
 {
 
 	if (LCR_PatternDisplay(0x2) < 0)
 		printf("Unable to start pattern display");
 }
 
-void case4() 
+void case7() // Standby Mode
 {
-	if (LCR_PatternDisplay(0x0) < 0)
-		printf("Unable to stop pattern display");
+	if (LCR_SetPowerMode(1) < 0)
+		printf("Unable to go to stand by");
 }
 
-void case5()
+void case8() // Normal Mode
 {
-	if (LCR_PatternDisplay(0x1) < 0)
-		printf("Unable to pause pattern display");
+	if (LCR_SetPowerMode(0) < 0)
+		printf("Unable to power on the board into normal mode");
 }
-
-	
 
 void sendDataToMirror() 
 {
@@ -325,19 +363,49 @@ void sendDataToMirror()
 	int error = 0;
 	int imageCount = 1 ;
 	int bitDepth = 24;
-	Image_t  pattern1Image_tSpace ;
+	int bitPos = 0;
+	int multiplier = 1;
+
+	//Image_t  pattern1Image_tSpace ;
 	
 	//Image_t *pattern1Image_t = &pattern1Image_tSpace;
 
 	Image_t *pattern1Image_t = PTN_Alloc(m_ptnWidth, m_ptnHeight, bitDepth);
+	PTN_Fill(pattern1Image_t, 0); // fill the image with zero values
 
-	char path1[]= "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\image4.bmp";
+	char path1[] = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\image4.bmp";
 	const char *pathptr = path1;
 	error = BMP_LoadFromFile(pathptr, pattern1Image_t);
-	if (error != SUCCESS)
+	if (error != 0)
 	{
 		printf("error in BMP_LoadFromFile\n");
 	}
+
+
+	Image_t *pattern1Image_t2 = PTN_Alloc(0, 0, 0); // create an empty image space
+	//init image space created
+	pattern1Image_t2->Width = m_ptnWidth;
+	pattern1Image_t2->Height = m_ptnHeight;
+	pattern1Image_t2->LineWidth = m_ptnWidth * multiplier;
+	pattern1Image_t2->Buffer = pattern1Image_t->Buffer;
+	pattern1Image_t2->FullHeight = m_ptnHeight;
+	pattern1Image_t2->BitDepth = 1;
+
+	error = PTN_Merge(pattern1Image_t, pattern1Image_t2, bitPos, pattern1Image_t2->BitDepth);
+	if (error != 0)
+	{
+		printf("error in PTN_Merge\n");
+	}
+
+	error = PTN_SwapColors(pattern1Image_t, PTN_COLOR_RED, PTN_COLOR_BLUE, PTN_COLOR_GREEN);
+
+	if (error != 0)
+	{
+		printf("error in PTN_SwapColors\n");
+	}
+
+
+
 	
 	printf("%d\n", pattern1Image_t->Buffer); /**< Pointer to the image buffer */
 	printf("%d\n",pattern1Image_t->Width);             /**< Width of the image in pixels */
@@ -362,7 +430,7 @@ void sendDataToMirror()
 
 
 	int origSize = splashSizeMaster;
-	int splashImageCount = 1;
+	int splashImageCount = 0;
 	LCR_InitPatternMemLoad(master, splashImageCount, splashSizeMaster);
 
 	int dnldSize = LCR_pattenMemLoad(master, splash_block_master + (origSize - splashSizeMaster), splashSizeMaster);

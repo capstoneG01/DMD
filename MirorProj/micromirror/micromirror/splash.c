@@ -292,3 +292,9 @@ void SPL_Free(uint08 *Splash)
 {
     free(Splash);
 }
+
+int SPL_sizeofHeader()
+{
+	return sizeof(SPL_Header_t);
+}
+

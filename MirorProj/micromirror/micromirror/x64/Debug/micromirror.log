@@ -1,14 +1,9 @@
-﻿  main.cpp
+﻿  QtCodeCoppy.cpp
 c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\project_constants.h(5): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
   c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\project_constants.h(5): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
-c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(142): warning C4805: '==': unsafe mix of type 'BOOL' and type 'bool' in operation
-c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(149): warning C4474: 'printf' : too many arguments passed for format string
-  c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(149): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
-c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(153): warning C4474: 'printf' : too many arguments passed for format string
-  c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(153): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
-c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(342): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'unsigned char *'
-c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(342): warning C4313: 'printf': '%d' in format string conflicts with argument 1 of type 'unsigned char *'
-c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(328): warning C4101: 'pattern1Image_tSpace': unreferenced local variable
-c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\main.cpp(323): warning C4101: 'splashData': unreferenced local variable
+c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\qtcodecoppy.cpp(151): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'unsigned char *'
+c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\qtcodecoppy.cpp(151): warning C4313: 'printf': '%d' in format string conflicts with argument 1 of type 'unsigned char *'
+c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\qtcodecoppy.cpp(46): warning C4101: 'i': unreferenced local variable
+c:\users\kanevsks\desktop\git\mirorproj\micromirror\micromirror\qtcodecoppy.cpp(62): warning C4101: 'errStr': unreferenced local variable
   micromirror.vcxproj -> C:\Users\kanevsks\Desktop\git\MirorProj\micromirror\x64\Debug\micromirror.exe
   micromirror.vcxproj -> C:\Users\kanevsks\Desktop\git\MirorProj\micromirror\x64\Debug\micromirror.pdb (Partial PDB)

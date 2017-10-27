@@ -42,6 +42,9 @@ int SPL_GetSplashImageInfo(uint08 const *Splash, SPL_Info_t *Info);
 uint08 *SPL_AllocSplash(int Width, int Height);
 void SPL_Free(uint08 *Splash);
 
+
+int SPL_sizeofHeader();
+
 #ifdef __cplusplus
 }
 #endif
