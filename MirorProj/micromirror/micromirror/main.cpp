@@ -90,6 +90,7 @@ int main(int argc, char **argv)
 		printf("O-Open connection, enter normal mode, stop, load image, start\n");
 		printf("X-Stop, enter standby mode, quit\n");
 		printf("9-Quit\n");
+		printf("Test change for git.\n");
 		std::cin >> inputValue;
 		switch (inputValue)
 		{
