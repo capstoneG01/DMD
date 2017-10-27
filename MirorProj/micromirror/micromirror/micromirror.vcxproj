@@ -139,6 +139,7 @@
     <ClInclude Include="API.h" />
     <ClInclude Include="batchfile.h" />
     <ClInclude Include="BMPParser.h" />
+    <ClInclude Include="CImg.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="compress.h" />
     <ClInclude Include="Error.h" />

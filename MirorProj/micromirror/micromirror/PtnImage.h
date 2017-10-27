@@ -9,6 +9,7 @@
 
 #include "Pattern.h"
 #include "Splash.h"
+#include "CImg.h"
 
 /**
  * Class for loading, storing and manipulating the pattern image.
@@ -21,6 +22,7 @@ class PtnImage
 private:
     Image_t *img;  /**< Pattern image data structure */
     //QImage qimg24; /**< QImage data structure */
+	cimg_library::CImg<unsigned char> cimg24;
     uint08 *splashData; /**< Splash data of the image */
     bool freeImg;
 
@@ -38,8 +40,8 @@ public:
         splashData = NULL;
         freeImg = false;
         img = image;
-        //qimg24 = QImage(img->Buffer, img->Width, img->Height,
-                            //img->LineWidth, QImage::Format_RGB888);
+        //qimg24 = QImage(img->Buffer, img->Width, img->Height, img->LineWidth, QImage::Format_RGB888);
+		cimg24 = cimg_library::CImg<unsigned char>(img->Buffer, img->Width, img->Height, img->LineWidth);
     }
 
 	/**
@@ -82,8 +84,8 @@ public:
     PtnImage(int width, int height, int bitDepth = 24)
     {
         img = PTN_Alloc(width, height, bitDepth);
-        qimg24 = QImage(img->Buffer, img->Width, img->Height,
-                            img->LineWidth, QImage::Format_RGB888);
+        //qimg24 = QImage(img->Buffer, img->Width, img->Height, img->LineWidth, QImage::Format_RGB888);
+		cimg24 = cimg_library::CImg<unsigned char>(img->Buffer, img->Width, img->Height, img->LineWidth);
         splashData = NULL;
         freeImg = true;
     }
@@ -123,8 +125,8 @@ public:
     PtnImage(PtnImage const &ptn)
     {
         img = PTN_Alloc(ptn.img->Width, ptn.img->Height, ptn.img->BitDepth);
-        qimg24 = QImage(img->Buffer, img->Width, img->Height,
-                            img->LineWidth, QImage::Format_RGB888);
+        //qimg24 = QImage(img->Buffer, img->Width, img->Height, img->LineWidth, QImage::Format_RGB888);
+		cimg24 = cimg_library::CImg<unsigned char>(img->Buffer, img->Width, img->Height, img->LineWidth);
         freeImg = true;
     }
 

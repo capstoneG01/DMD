@@ -3,8 +3,10 @@
 
 #include "usb.h"
 #include "API.h"
+
 //project file includes:
 #include "helper_functions.h"
+
 //API file includes:
 //system includes:
 #include <stdio.h>      // standard input / output functions
@@ -17,7 +19,7 @@
 #include "BMPParser.h"
 #include "pattern.h"
 #include "splash.h"
-//#include "CImg.h"
+#include "CImg.h"
 #include "splash.h"
 #include "compress.h"
 #include "error.h"
@@ -40,19 +42,20 @@ struct PatternElement2
 void addPattern()
 {
 	//Temp
-	char imagePath[] = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\image7.bmp";
+	char imagePath[] = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\bolt.bmp";
 
 	//Temp
 	int i;
 	int numPatAdded = 0;
 
 	PatternElement2 pattern;
-	pattern.bits = 8;
+	pattern.bits = 1;
 	pattern.color = 1;
-	pattern.exposure = 200000;
+	pattern.exposure = 100000;
 	pattern.darkPeriod = 0;
 	pattern.trigIn = false;
-	pattern.trigOut2 = true;
+	pattern.trigOut2 = true;	
+	
 	numPatAdded++;
 
 	LCR_ClearPatLut();
@@ -76,8 +79,8 @@ void addPattern()
 		printf( "Error:Total Bit Depth cannot exceed 400\n");
 	}
 	
-	pattern.splashImageIndex = imgCount;
-	pattern.splashImageBitPos = bits;		
+	pattern.splashImageIndex = 0;// imgCount;
+	pattern.splashImageBitPos = 0;// bits;		
 	totalSplashImages = imgCount + 1;
 	
 
@@ -123,7 +126,7 @@ void addPattern()
 		printf("Making pic from %d\n", test_num);
 		PTN_Fill(imgPrtDest, test_num); // fill the image with zero values
 		
-		Image_t *imgPrtSrc = PTN_Alloc(m_ptnWidth, m_ptnHeight, bitDepth); // PTN_Alloc(0, 0, 0);
+		Image_t *imgPrtSrc = PTN_Alloc(m_ptnWidth, m_ptnHeight, 24); // PTN_Alloc(0, 0, 0);
 
 
 		error = BMP_LoadFromFile(imagePath, imgPrtSrc);
@@ -158,7 +161,7 @@ void addPattern()
 		PTN_Merge(imgPrtDest, imgPrtSrc, 0, bitDepth);
 		PTN_SwapColors(imgPrtDest, PTN_COLOR_RED, PTN_COLOR_BLUE, PTN_COLOR_GREEN);
 		
-		error = BMP_SaveToFile(imgPrtDest, "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\imgPrtMERGED.bmp");
+		/*error = BMP_SaveToFile(imgPrtDest, "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\imgPrtMERGED.bmp");
 		if (error != 0)
 		{
 			printf("Cant save image\n");
@@ -167,7 +170,8 @@ void addPattern()
 		if (error != 0)
 		{
 			printf("Cant save image\n");
-		}
+		}*/
+
 		uint08* splash_block = NULL;			
 		spalshImageCount = spalshImageCount;
 		int splashSize = toSplash2(imgPrtDest, &splash_block);
@@ -197,6 +201,7 @@ void addPattern()
 		
 		LCR_InitPatternMemLoad(master, splashImageCount, splash_size);
 		int imgDataDwld = 0;
+		
 		while (splash_size > 0)
 		{
 			int dnldSize = LCR_pattenMemLoad(master, splash_block + (origSize - splash_size), splash_size); // Original line
@@ -205,9 +210,12 @@ void addPattern()
 			{
 				printf("Downloading to device failed\n");
 			}
+			
 			splash_size -= dnldSize;
+			
 			if (splash_size < 0)
 				splash_size = 0;
+			
 			imgDataDwld += dnldSize;
 		}		
 	}
@@ -223,9 +231,6 @@ int toSplash2(Image_t *img, unsigned char **data)
 	if (splashData == NULL)
 	{
 		splashData = SPL_AllocSplash(img->Width, img->Height);
-		//int miltiplicator = 3;
-		//splashData = (uint08 *) malloc(img->Width * img->Height * miltiplicator + SPL_sizeofHeader() ); // this is what SPL_AllocSplash does....
-
 		if (splashData == NULL)
 			return ERR_OUT_OF_RESOURCE;
 	}

@@ -25,6 +25,7 @@
 #include "pattern.h"
 #include "splash.h"
 #include "QtCodeCoppy.h"
+#include "CImg.h"
 
 void sendDataToMirror(void);
 
@@ -73,8 +74,6 @@ int main(int argc, char **argv)
 	int runProgram = 1;	
 	unsigned char inputValue;
 	std::cout << "Micromirror main function start " << std::endl;
-	//or
-	//printf(""Micromirror main function start %d"\n",rollingValue);
 
 	do
 	{
@@ -90,7 +89,7 @@ int main(int argc, char **argv)
 		printf("O-Open connection, enter normal mode, stop, load image, start\n");
 		printf("X-Stop, enter standby mode, quit\n");
 		printf("9-Quit\n");
-		printf("Test change for git.\n");
+
 		std::cin >> inputValue;
 		switch (inputValue)
 		{
@@ -143,16 +142,8 @@ int main(int argc, char **argv)
 		}
 	} while (runProgram);
 
-	/*
-	std::cout << "I want to show you some balls... Please Enter a number: ";
-	std::cin >> rollingValue;
-	print_balls(rollingValue);
-	std::cout << "Thank you ! Enter any muner to to close....." << std::endl;
-	std::cin >> rollingValue;
-	*/
+
 	std::cout << "Micromirror main function End " << std::endl;
-	//or
-	//printf(""Micromirror main function End %d"\n",rollingValue);
 	return 0;
 }
 
@@ -404,9 +395,6 @@ void sendDataToMirror()
 	{
 		printf("error in PTN_SwapColors\n");
 	}
-
-
-
 	
 	printf("%d\n", pattern1Image_t->Buffer); /**< Pointer to the image buffer */
 	printf("%d\n",pattern1Image_t->Width);             /**< Width of the image in pixels */
