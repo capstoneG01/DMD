@@ -131,7 +131,6 @@ void menuOpen()
 		if (usb_error_flag == 0 && USB_IsConnected() == true)
 		{
 			printf("USB Opened!\n");
-			flipDisplay();
 			i = 6; // just in case fall out of for loop	
 		}
 		else
@@ -165,6 +164,7 @@ void menuLoad()
 	{
 		printf("Mode switched to: Pattern on the fly\n");
 	}
+	flipDisplay();
 
 	addPattern();
 }
@@ -215,10 +215,14 @@ void menuNormalMode()
 // Flip the long and short axes so we can look at things "right side up".
 void flipDisplay()
 {
+	printf("1 flipDisplay called.\n Long: %d\nShort: %d\n", LCR_GetLongAxisImageFlip(), LCR_GetShortAxisImageFlip());
+
 	if (LCR_SetLongAxisImageFlip(0) < 0)
-		printf("Unable to set north south flip\n");
+		printf("Unable to set horizontal flip\n");
 	if (LCR_SetShortAxisImageFlip(0) < 0)
-		printf("Unable to set east west flip\n");
+		printf("Unable to set vertical flip\n");
+
+	printf("2 flipDisplay called.\n Long: %d\nShort: %d\n", LCR_GetLongAxisImageFlip(), LCR_GetShortAxisImageFlip());
 }
 
 

@@ -1,7 +1,0 @@
-﻿  QtCodeCoppy.cpp
-c:\git\mirorproj\micromirror\micromirror\project_constants.h(5): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
-  c:\git\mirorproj\micromirror\micromirror\project_constants.h(5): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
-c:\git\mirorproj\micromirror\micromirror\qtcodecoppy.cpp(64): warning C4101: 'errStr': unreferenced local variable
-     Creating library C:\git\MirorProj\micromirror\x64\Debug\micromirror.lib and object C:\git\MirorProj\micromirror\x64\Debug\micromirror.exp
-  micromirror.vcxproj -> C:\git\MirorProj\micromirror\x64\Debug\micromirror.exe
-  micromirror.vcxproj -> C:\git\MirorProj\micromirror\x64\Debug\micromirror.pdb (Partial PDB)

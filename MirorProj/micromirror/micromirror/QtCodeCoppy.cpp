@@ -42,13 +42,13 @@ struct PatternElement
 void addPattern()
 {
 	//Temp
-	char imagePath[] = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\bolt.bmp";
+	char imagePath[] = "C:\\Users\\kanevsks\\Desktop\\git\\MirorProj\\micromirror\\G01b.bmp";
 
 	//Temp
 	int numPatAdded = 0;
 
 	PatternElement pattern;
-	pattern.bits = 1;
+	pattern.bits = 8;
 	pattern.color = 1;
 	pattern.exposure = 100000;
 	pattern.darkPeriod = 0;
